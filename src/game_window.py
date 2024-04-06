@@ -25,7 +25,7 @@ dieu_avatar = pygame.transform.scale(dieu_avatar, AVATAR_SIZE)
 hoppy_avatar = pygame.image.load('assets/images/groppy.png').convert_alpha()
 hoppy_avatar = pygame.transform.scale(hoppy_avatar, AVATAR_SIZE)
 
-dialogues = [
+dialogues_intro = [
     ("Personnage", "Comment je suis arrivé ici ??", personnage_avatar, 'assets/images/sky.png'),
     ("Dieu", "Hola jeune chico tu n'as pas assez accès au paradis car toute ta vie tu t'es concentré sur toi même ...", dieu_avatar, 'assets/images/sky.png'),
     ("Dieu", "Tu n'as pas assez 'OUVERT' ton esprit durant ta misérable vie de mauvais nullos.", dieu_avatar, 'assets/images/sky.png'),
@@ -53,6 +53,18 @@ dialogues = [
     ("Hoppy", "Parfait de toute façon tu n'avais pas le choix ahah on rigole par ici lol xptdr", hoppy_avatar, 'assets/images/street.png'),
     ("Hoppy", "Bon trêve de chinoiserie, dans le premier jeu tu dois attraper l'amour des gens qui tombe du ciel", hoppy_avatar, 'assets/images/street.png'),
     ("Hoppy", "Si tu as un score de 50 je te donne accès au jeu suivant bonne chance", hoppy_avatar, 'assets/images/street.png'),
+]
+
+dialogues_loose = [
+    ("Dieu", "Haha, tu es tellement nul que même un chat pourrait faire mieux que toi !", dieu_avatar, 'assets/images/sky.png'),
+    ("Dieu", "Je te donnerais bien une autre chance, mais vraiment... Tu ne mérites même pas cela.", dieu_avatar, 'assets/images/sky.png'),
+    ("Personnage", "C'est bon, j'ai compris !", personnage_avatar, 'assets/images/street.png'),
+]
+
+dialogues_win = [
+    ("Hoppy", "Bravo ! Tu as réussi à démontrer que tu es une meilleure personne. Continue comme ça !", hoppy_avatar, 'assets/images/street.png'),
+    ("Hoppy", "Tu as prouvé que tu es prêt à évoluer. Maintenant, tu es prêt à retourner au paradis.", hoppy_avatar, 'assets/images/street.png'),
+    ("Hoppy", "Bonne chance pour la suite de ton voyage. Je serai là si tu as besoin de moi.", hoppy_avatar, 'assets/images/street.png'),
 ]
 
 dialogue_index = 0
@@ -107,15 +119,15 @@ def intro_scene():
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     dialogue_index += 1
-                    if dialogue_index >= len(dialogues):
+                    if dialogue_index >= len(dialogues_intro):
                         intro_done = True
-        if dialogue_index < len(dialogues):
-            _, _, _, background_path = dialogues[dialogue_index]
+        if dialogue_index < len(dialogues_intro):
+            _, _, _, background_path = dialogues_intro[dialogue_index]
             local_background_image = pygame.image.load(background_path).convert_alpha()
             local_background_image = pygame.transform.scale(local_background_image, (WINDOW_WIDTH, WINDOW_HEIGHT))
             screen.blit(local_background_image, (0, 0))
             draw_dialogue_box()
-            speaker, dialogue, avatar, _ = dialogues[dialogue_index]
+            speaker, dialogue, avatar, _ = dialogues_intro[dialogue_index]
             draw_text(f"{speaker}: {dialogue}", (220, WINDOW_HEIGHT - DIALOGUE_BOX_HEIGHT + 60), avatar)
         else:
             screen.blit(background_image, (0, 0))
@@ -133,8 +145,22 @@ def main():
     score = 0
     while score < 50:
         score = run_minigame(screen, font)
+        if score < 50:
+            for dialogue in dialogues_loose:
+                speaker, text, avatar, background_path = dialogue
+                local_background_image = pygame.image.load(background_path).convert_alpha()
+                local_background_image = pygame.transform.scale(local_background_image, (WINDOW_WIDTH, WINDOW_HEIGHT))
+                screen.blit(local_background_image, (0, 0))
+                draw_dialogue_box()
+                draw_text(f"{speaker}: {text}", (220, WINDOW_HEIGHT - DIALOGUE_BOX_HEIGHT + 60), avatar)
+                pygame.display.flip()
+                pygame.time.delay(2000)
 
-        pygame.time.Clock().tick(60)
+            score = 0
+
+    pygame.quit()
+    sys.exit()
+    pygame.time.Clock().tick(60)
 
 if __name__ == "__main__":
     main()
