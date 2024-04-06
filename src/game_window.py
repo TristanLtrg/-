@@ -26,14 +26,18 @@ dieu_avatar = pygame.image.load('assets/images/god.png').convert_alpha()
 dieu_avatar = pygame.transform.scale(dieu_avatar, AVATAR_SIZE)
 
 dialogues = [
-    ("Personnage", "Bonjour, pourquoi m'avez-vous convoqué ici ?", personnage_avatar),
-    ("Dieu", "Désolé de te l'annoncer mais tu es viré du domaine céleste.", dieu_avatar),
-    ("Personnage", "Comment ça ? comment est-ce possible ?", personnage_avatar),
-    ("Dieu", "T'as pas de taff, t'as pas de meuf, t'as pas de thune. T'es qu'une personne pour qui je n'ai pas de respect.", dieu_avatar)
+    ("Personnage", "Comment je suis arrivé ici ??", personnage_avatar),
+    ("Dieu", "Hola jeune chico tu n'a pas assez accès au paradis car toute ta vie tu t'es concentré sur toi même ...", dieu_avatar),
+    ("Dieu", "tu n'a pas assez 'OUVERT' ton esprit durant ta misérable vie de mauvais nullos.", dieu_avatar),
+    ("Personnage", "Ce n'est pas que je suis égoîste, mais je n'aime pas partager avec les gueux de ce monde !!!!", personnage_avatar),
+    ("Dieu", "T'as pas de taff, t'as pas de meuf, t'as pas de thune. T'es qu'une personne pour qui je n'ai pas de respect.", dieu_avatar),
+    ("Dieu", "Mais la grande personne que je suis (humble)", dieu_avatar), 
+    ("Dieu", "te laisse une chance de te racheter et de venir au paradis pour ...", dieu_avatar),
+    ("Dieu", "avoir de la co.. et des pu.. .. Enfin Bref Bonne chance", dieu_avatar),
 ]
 dialogue_index = 0
 
-font = pygame.font.SysFont('Arial', 24)
+font = pygame.font.SysFont('Arial', 22)
 
 def draw_text(text, position, avatar=None):
     if avatar:
