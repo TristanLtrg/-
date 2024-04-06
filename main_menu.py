@@ -1,5 +1,6 @@
 import pygame
 import sys
+from src.game_window import main as start_game
 
 pygame.init()
 
@@ -55,13 +56,10 @@ while running:
                     for item, rect in buttons_dict.items():
                         if rect.collidepoint(mouse_x, mouse_y):
                             if item == "Démarrer":
-                                print("Démarrer le jeu")
-                                pygame.quit()
-                                exec(open("./src/game_window.py").read())
+                                start_game()
                                 pygame.quit()
                                 sys.exit()
                             elif item == "Quitter":
-                                print("Quitter le jeu")
                                 pygame.quit()
                                 sys.exit()
     screen.fill(WHITE)
