@@ -1,5 +1,6 @@
 import pygame
 import sys
+# from src.mini_games_selector import mini_games_selector
 
 pygame.init()
 
@@ -36,9 +37,9 @@ dialogues = [
     ("Dieu", "Avoir de la co.. et des pu.. .. Enfin Bref Bonne chance", dieu_avatar, 'assets/images/sky.png'),
     ("Personnage", "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH je suis choqué de ouf la (tombe du paradis).", personnage_avatar, 'assets/images/fall.png'),
     ("Personnage", "Ouille ça fait mal de tomber de si haut", personnage_avatar, 'assets/images/street_blur.png'),
-    ("Hoppy", "Miou miouu mioumiou miou miaou miou myyu mou miooou ?", hoppy_avatar, 'assets/images/street.png'),
-    ("Hoppy", "Mmmh mmh (tousse)", hoppy_avatar, 'assets/images/street.png'),
-    ("Hoppy", "Désolé mauvais langage mauvaise habitude que j'ai prise là où je traine", hoppy_avatar, 'assets/images/street.png'),
+    ("un chat étrange", "Miou miouu mioumiou miou miaou miou myyu mou miooou ?", hoppy_avatar, 'assets/images/street.png'),
+    ("un chat", "Mmmh mmh (tousse)", hoppy_avatar, 'assets/images/street.png'),
+    ("un chat", "Désolé mauvais langage mauvaise habitude que j'ai prise là où je traine", hoppy_avatar, 'assets/images/street.png'),
     ("Hoppy", "Je me présente Hoppy un chat ....", hoppy_avatar, 'assets/images/street.png'),
     ("Personnage", "Juste un chat ... c'est tout ... un chat ..", personnage_avatar, 'assets/images/street.png'),
     ("Personnage", "Décevant ..", personnage_avatar, 'assets/images/street.png'),
@@ -46,11 +47,13 @@ dialogues = [
     ("Personnage", "Toi serviteur de Dieu .. Je n'y crois pas", personnage_avatar, 'assets/images/street.png'),
     ("Hoppy", "M'en fous", hoppy_avatar, 'assets/images/street.png'),
     ("Hoppy", "Je suis là pour t'aider à revenir au paradis une fois que tu auras plus ouvert ton esprit sur le monde", hoppy_avatar, 'assets/images/street.png'),
-    ("Hoppy", "Pour cela je vais te proposer des défis à réaliser pour devenir une meilleure personne.", hoppy_avatar, 'assets/images/street.png'),
-    ("Hoppy", "Tiens voici les défis que je te propose, sachant que tu n'es pas obligé de tous les faire.", hoppy_avatar, 'assets/images/street.png'),
-    ("Hoppy", "Il te suffit de remplir la jauge du Partage et de l'amitié", hoppy_avatar, 'assets/images/street.png'),
-    ("Hoppy", "NE LA VIDE PAS OU TU MOURRAS", hoppy_avatar, 'assets/images/street.png'),
-    ("Personnage", "Okééé", personnage_avatar, 'assets/images/street.png'),
+    ("Hoppy", "Pour cela je vais te proposer une série de défis à réaliser pour devenir une meilleure personne.", hoppy_avatar, 'assets/images/street.png'),
+    ("Hoppy", "Tu devras valider les défis avec un certain score pour me montrer que tu as évolué", hoppy_avatar, 'assets/images/street.png'),
+    ("Hoppy", "Une fois tout les jeux fini je verrais pour t'envoyer revoir Dieu", hoppy_avatar, 'assets/images/street.png'),
+    ("Personnage", "Okay Okay (Naps)", personnage_avatar, 'assets/images/street.png'),
+    ("Hoppy", "Parfait de toute façon tu n'avais pas le choix ahah on rigole par ici lol xptdr", hoppy_avatar, 'assets/images/street.png'),
+    ("Hoppy", "Bon trêve de chinoiserie, dans le premier jeu tu dois attraper l'amour des gens qui tombe du ciel", hoppy_avatar, 'assets/images/street.png'),
+    ("Hoppy", "Si tu as un score de 50 je te donne accès au jeu suivant bonne chance", hoppy_avatar, 'assets/images/street.png'),
 ]
 
 dialogue_index = 0
@@ -142,8 +145,9 @@ def main_game():
             paused = draw_pause_menu()
         else:
             screen.fill(BLACK)
-            # Faire le Big Jeu ici
             pygame.display.flip()
+
+        pygame.time.Clock().tick(60)
 
 if __name__ == "__main__":
     intro_scene()
