@@ -6,7 +6,7 @@ pygame.init()
 WINDOW_WIDTH = 1920
 WINDOW_HEIGHT = 1080
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT), pygame.FULLSCREEN)
-pygame.display.set_caption("Game Window")
+pygame.display.set_caption("JAM")
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 BROWN = (165, 42, 42)
@@ -22,6 +22,8 @@ personnage_avatar = pygame.image.load('assets/images/player.png').convert_alpha(
 personnage_avatar = pygame.transform.scale(personnage_avatar, AVATAR_SIZE)
 dieu_avatar = pygame.image.load('assets/images/god.png').convert_alpha()
 dieu_avatar = pygame.transform.scale(dieu_avatar, AVATAR_SIZE)
+dieu_avatar_rigole = pygame.image.load('assets/images/god_Laughing.png').convert_alpha()
+dieu_avatar_rigole = pygame.transform.scale(dieu_avatar_rigole, AVATAR_SIZE)
 hoppy_avatar = pygame.image.load('assets/images/groppy.png').convert_alpha()
 hoppy_avatar = pygame.transform.scale(hoppy_avatar, AVATAR_SIZE)
 
@@ -56,8 +58,8 @@ dialogues_intro = [
 ]
 
 dialogues_loose = [
-    ("Dieu", "Haha, tu es tellement nul que même un chat pourrait faire mieux que toi !", dieu_avatar, 'assets/images/sky.png'),
-    ("Dieu", "Je te donnerais bien une autre chance, mais vraiment... Tu ne mérites même pas cela.", dieu_avatar, 'assets/images/sky.png'),
+    ("Dieu", "Haha, tu es tellement nul que même un chat pourrait faire mieux que toi !", dieu_avatar_rigole, 'assets/images/sky.png'),
+    ("Dieu", "Je te donnerais bien une autre chance, mais vraiment... Tu ne mérites même pas cela.", dieu_avatar_rigole, 'assets/images/sky.png'),
     ("Personnage", "C'est bon, j'ai compris !", personnage_avatar, 'assets/images/street.png'),
 ]
 
@@ -122,17 +124,40 @@ def intro_scene():
                     if dialogue_index >= len(dialogues_intro):
                         intro_done = True
         if dialogue_index < len(dialogues_intro):
-            _, _, _, background_path = dialogues_intro[dialogue_index]
+            speaker, dialogue, avatar, background_path = dialogues_intro[dialogue_index]
             local_background_image = pygame.image.load(background_path).convert_alpha()
             local_background_image = pygame.transform.scale(local_background_image, (WINDOW_WIDTH, WINDOW_HEIGHT))
             screen.blit(local_background_image, (0, 0))
             draw_dialogue_box()
-            speaker, dialogue, avatar, _ = dialogues_intro[dialogue_index]
             draw_text(f"{speaker}: {dialogue}", (220, WINDOW_HEIGHT - DIALOGUE_BOX_HEIGHT + 60), avatar)
         else:
             screen.blit(background_image, (0, 0))
         pygame.display.flip()
         pygame.time.Clock().tick(60)
+
+def game_over_scene(screen, font):
+    global dialogue_index
+    dialogue_index = 0
+    while dialogue_index < len(dialogues_loose):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return "quit"
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    dialogue_index += 1
+                    if dialogue_index >= len(dialogues_loose):
+                        return "retry"
+                elif event.key == pygame.K_ESCAPE:
+                    return "quit"
+        speaker, dialogue, avatar, background_path = dialogues_loose[dialogue_index]
+        local_background_image = pygame.image.load(background_path).convert_alpha()
+        local_background_image = pygame.transform.scale(local_background_image, (WINDOW_WIDTH, WINDOW_HEIGHT))
+        screen.blit(local_background_image, (0, 0))
+        draw_dialogue_box()
+        draw_text(f"{speaker}: {dialogue}", (220, WINDOW_HEIGHT - DIALOGUE_BOX_HEIGHT + 60), avatar)
+        pygame.display.flip()
+        pygame.time.Clock().tick(60)
+
 
 def main():
     pygame.init()
@@ -146,18 +171,12 @@ def main():
     while score < 50:
         score = run_minigame(screen, font)
         if score < 50:
-            for dialogue in dialogues_loose:
-                speaker, text, avatar, background_path = dialogue
-                local_background_image = pygame.image.load(background_path).convert_alpha()
-                local_background_image = pygame.transform.scale(local_background_image, (WINDOW_WIDTH, WINDOW_HEIGHT))
-                screen.blit(local_background_image, (0, 0))
-                draw_dialogue_box()
-                draw_text(f"{speaker}: {text}", (220, WINDOW_HEIGHT - DIALOGUE_BOX_HEIGHT + 60), avatar)
-                pygame.display.flip()
-                pygame.time.delay(2000)
-
+            action = game_over_scene(screen, font)
+            if action == 'retry':
+                continue
+            elif action == 'quit':
+                break
             score = 0
-
     pygame.quit()
     sys.exit()
     pygame.time.Clock().tick(60)
