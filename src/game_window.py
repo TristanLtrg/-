@@ -30,8 +30,8 @@ hoppy_avatar = pygame.transform.scale(hoppy_avatar, AVATAR_SIZE)
 
 dialogues_intro = [
     ("Personnage", "Comment je suis arrivé ici ??", personnage_avatar, 'assets/images/sky.png'),
-    ("Dieu", "Hola jeune chico tu n'as pas assez accès au paradis car toute ta vie tu t'es concentré sur toi même ...", dieu_avatar, 'assets/images/sky.png'),
-    ("Dieu", "Tu n'as pas assez 'OUVERT' ton esprit durant ta misérable vie de mauvais nullos.", dieu_avatar, 'assets/images/sky.png'),
+    ("Dieu", "Hola jeune chico tu n'as pas assez accès au paradis car toute ta vie tu t'es concentré sur toi-même ...", dieu_avatar, 'assets/images/sky.png'),
+    ("Dieu", "Tu n'as pas assez \"OUVERT\" ton esprit durant ta misérable vie de mauvais nullos.", dieu_avatar, 'assets/images/sky.png'),
     ("Personnage", "Ce n'est pas que je suis égoïste, mais je n'aime pas partager avec les gueux de ce monde !!!!", personnage_avatar, 'assets/images/sky.png'),
     ("Dieu", "T'as pas de taff, t'as pas de meuf, t'as pas de thune. T'es qu'une personne pour qui je n'ai pas de respect.", dieu_avatar, 'assets/images/sky.png'),
     ("Dieu", "Mais la grande personne que je suis (humble)", dieu_avatar, 'assets/images/sky.png'),
@@ -58,16 +58,53 @@ dialogues_intro = [
     ("Hoppy", "Si tu as un score de 50 je te donne accès au jeu suivant bonne chance", hoppy_avatar, 'assets/images/street.png'),
 ]
 
-dialogues_loose = [
+dialogues_loose_first = [
     ("Dieu", "Haha, tu es tellement nul que même un chat pourrait faire mieux que toi !", dieu_avatar_rigole, 'assets/images/sky.png'),
     ("Dieu", "Je te donnerais bien une autre chance, mais vraiment... Tu ne mérites même pas cela.", dieu_avatar_rigole, 'assets/images/sky.png'),
     ("Personnage", "C'est bon, j'ai compris !", personnage_avatar, 'assets/images/street.png'),
 ]
 
-dialogues_win = [
+dialogues_win_first = [
     ("Hoppy", "Bravo ! Tu as réussi à démontrer que tu es une meilleure personne. Continue comme ça !", hoppy_avatar, 'assets/images/street.png'),
     ("Hoppy", "Tu as prouvé que tu es prêt à évoluer. Maintenant, tu es prêt à retourner au paradis.", hoppy_avatar, 'assets/images/street.png'),
     ("Hoppy", "Bonne chance pour la suite de ton voyage. Je serai là si tu as besoin de moi.", hoppy_avatar, 'assets/images/street.png'),
+]
+
+dialogues_loose_second = [
+    ("Dieu", "AHAHAHHAHAHHAAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAAHAHAHAHAHAHAH", dieu_avatar_rigole, 'assets/images/sky.png'),
+    ("Dieu", "AHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHHAHAHAHAHAHAHAH", dieu_avatar_rigole, 'assets/images/sky.png'),
+    ("Dieu", "Cela m'avait semblé bizarre que tu aies réussi une épreuve ....", dieu_avatar_rigole, 'assets/images/sky.png'),
+    ("Personnage", ".... Tu vas voir de quoi je suis réellement capable!", personnage_avatar, 'assets/images/tea.png'),
+]
+
+dialogues_win_seconde = [
+    ("Hoppy", "Bien joué tu as réussi ta deuxième épreuve pour montrer que tu étais capable de t'ouvrir au monde et revenir au paradis.", hoppy_avatar, 'assets/images/tea.png'),
+    ("Hoppy", "Cependant ...", hoppy_avatar, 'assets/images/street.png'),
+    ("Hoppy", "Il te reste encore des épreuves pour prouver que tu as entièrement ouvert au monde. Je te souhaite une bonne chance pour la suite.", hoppy_avatar, 'assets/images/tea.png'),
+]
+
+dialogues_loose_third = [
+    ("Dieu", "Et croire que j'ai pensé que tu étais capable de faire quelque chose après avoir été expulsé du paradis...", dieu_avatar_rigole, 'assets/images/sky.png'),
+    ("Dieu", "Enfin bon courage maintenant que tu es bloqué pour toujours ici-bas.", dieu_avatar_rigole, 'assets/images/sky.png'),
+    ("Personnage", "je vais vous prouver que je suis digne de revenir au paradis", personnage_avatar, 'assets/images/place.png'),
+]
+
+dialogues_win_third = [
+    ("Hoppy", "Une nouvelle épreuve de réussi!", hoppy_avatar, 'assets/images/place.png'),
+    ("Hoppy", "CChaque épreuve que tu réussis montre que tu es de plus en plus ouvert au monde et que tu mérites ta place parmi nous aux cieux", hoppy_avatar, 'assets/images/place.png'),
+    ("Hoppy", "Ne lâche pas tu te rapproches de ton bu!!", hoppy_avatar, 'assets/images/place.png'),
+]
+
+dialogues_loose_fourth = [
+    ("Dieu", "Si près du but et pourtant si loin....", dieu_avatar_rigole, 'assets/images/sky.png'),
+    ("Dieu", "Tu as passé tant de temps pour raté ahahahha.", dieu_avatar_rigole, 'assets/images/sky.png'),
+    ("Personnage", "Je n'ai pas dit mon dernier mot...", personnage_avatar, 'assets/images/sky.png'),
+]
+
+dialogues_win_fourth = [
+    ("Hoppy", "Tu as enfin réussi à rejoindre le paradis", hoppy_avatar, 'assets/images/sky.png'),
+    ("Hoppy", "Je te laisse dès à présent nous rejoindre et reprendre ta place", hoppy_avatar, 'assets/images/sky.png'),
+    ("Dieu", "hisashiburi dana mugiwara.", dieu_avatar, 'assets/images/sky.png'),
 ]
 
 dialogue_index = 0
@@ -136,21 +173,21 @@ def intro_scene():
         pygame.display.flip()
         pygame.time.Clock().tick(60)
 
-def game_over_scene(screen, font):
+def game_over_scene(screen, dialogues):
     global dialogue_index
     dialogue_index = 0
-    while dialogue_index < len(dialogues_loose):
+    while dialogue_index < len(dialogues):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return "quit"
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     dialogue_index += 1
-                    if dialogue_index >= len(dialogues_loose):
+                    if dialogue_index >= len(dialogues):
                         return "retry"
                 elif event.key == pygame.K_ESCAPE:
                     return "quit"
-        speaker, dialogue, avatar, background_path = dialogues_loose[dialogue_index]
+        speaker, dialogue, avatar, background_path = dialogues[dialogue_index]
         local_background_image = pygame.image.load(background_path).convert_alpha()
         local_background_image = pygame.transform.scale(local_background_image, (WINDOW_WIDTH, WINDOW_HEIGHT))
         screen.blit(local_background_image, (0, 0))
@@ -171,30 +208,45 @@ def main():
     while score < 50:
         score = run_minigame(screen, font)
         if score < 50:
-            action = game_over_scene(screen, font)
+            action = game_over_scene(screen, dialogues_loose_first)
             if action == 'retry':
                 continue
             elif action == 'quit':
-                break
+                exit(0)
             score = 0
     pygame.mixer.music.stop()
-    clicker_success = run_clicker_game(screen, font)
-    if clicker_success:
-        print("Bravo")
-    else:
-        print("Dommage")
-
-    cleaning_success = run_cleaning_game(screen, font)
-    if cleaning_success:
-        print("Félicitations ! Vous avez nettoyé tous les déchets.")
-    else:
-        print("Temps écoulé ! Essayez encore.")
-    game_won = run_door_game(screen, font)
-    
-    if game_won:
-        print("Félicitations ! Vous avez trouvé la bonne porte !")
-    else:
-        print("Dommage, ce n'était pas la bonne porte. Essayez encore !")
+    game_over_scene(screen, dialogues_win_first)
+    clicker_success = False 
+    while (clicker_success != True) :
+        clicker_success = run_clicker_game(screen, font)
+        if (clicker_success == False):
+            action = game_over_scene(screen, dialogues_loose_second)
+            if action == 'retry':
+                continue
+            elif action == 'quit':
+                exit(0)
+    game_over_scene(screen, dialogues_win_seconde)
+    cleaning_success = False
+    while (cleaning_success != True):
+        cleaning_success = run_cleaning_game(screen, font)
+        if (cleaning_success == False):
+            action = game_over_scene(screen, dialogues_loose_third)
+            if action == 'retry':
+                continue
+            elif action == 'quit':
+                exit(0)
+    game_over_scene(screen, dialogues_win_third)
+    game_won = False
+    while (game_won != True):
+        game_won = run_door_game(screen, font)
+        if (game_won == False):
+            action = game_over_scene(screen, dialogues_loose_fourth)
+            if action == 'retry':
+                continue
+            if action == 'quit':
+                exit(0)
+    game_over_scene(screen, dialogues_win_fourth)
+    print("Félicitations! Et merci d'avoir Joué.\nCréteur: DoubleT(Tristan Darodes de tailly & Tristan Leturgie)")
     pygame.quit()
     sys.exit()
     pygame.time.Clock().tick(60)
