@@ -203,6 +203,65 @@ def run_clicker_game(screen, font):
     
     return clicks >= click_goal
 
+import random
+
+def run_cleaning_game(screen, font):
+    start_time = pygame.time.get_ticks()
+    time_limit = 60000
+    
+    dechets = [pygame.image.load(f'assets/images/dechet{i % 3 + 1}.png').convert_alpha() for i in range(20)]
+    dechet_rects = [dechet.get_rect(topleft=(random.randint(0, screen.get_width() - 100), random.randint(0, screen.get_height() - 100))) for dechet in dechets]
+    
+    poubelle_image = pygame.image.load('assets/images/poubelle.jpg').convert_alpha()
+    poubelle_rect = poubelle_image.get_rect(center=(screen.get_width() // 2, screen.get_height() // 2))
+    
+    dragging = None
+    offset_x = offset_y = 0
+
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                for i, rect in enumerate(dechet_rects):
+                    if rect.collidepoint(event.pos):
+                        dragging = i
+                        mouse_x, mouse_y = event.pos
+                        offset_x = rect.x - mouse_x
+                        offset_y = rect.y - mouse_y
+                        break
+            elif event.type == pygame.MOUSEBUTTONUP:
+                if dragging is not None and poubelle_rect.collidepoint(event.pos):
+                    dechets.pop(dragging)
+                    dechet_rects.pop(dragging)
+                dragging = None
+            elif event.type == pygame.MOUSEMOTION and dragging is not None:
+                mouse_x, mouse_y = event.pos
+                dechet_rects[dragging].x = mouse_x + offset_x
+                dechet_rects[dragging].y = mouse_y + offset_y
+        
+        current_time = pygame.time.get_ticks()
+        if current_time - start_time > time_limit or not dechets:
+            running = False
+        
+        screen.fill((255, 255, 255))
+        for dechet, rect in zip(dechets, dechet_rects):
+            screen.blit(dechet, rect)
+        screen.blit(poubelle_image, poubelle_rect)
+        
+        time_left = max(0, (time_limit - (current_time - start_time)) // 1000)
+        time_text = font.render(f"Temps restant: {time_left}s", True, (0, 0, 0))
+        screen.blit(time_text, (10, 10))
+        
+        pygame.display.flip()
+        pygame.time.Clock().tick(60)
+    
+    return not dechets
+
+
 def main():
     pygame.init()
     WINDOW_WIDTH = 1920
@@ -227,7 +286,11 @@ def main():
     else:
         print("Dommage")
 
-    ##appelle d'un nouveau ici jeu ici
+    cleaning_success = run_cleaning_game(screen, font)
+    if cleaning_success:
+        print("Félicitations ! Vous avez nettoyé tous les déchets.")
+    else:
+        print("Temps écoulé ! Essayez encore.")
     pygame.quit()
     sys.exit()
     pygame.time.Clock().tick(60)
