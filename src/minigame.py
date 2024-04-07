@@ -174,8 +174,11 @@ def run_cleaning_game(screen, font):
     return not dechets
 
 def run_door_game(screen, font):
-    porte_fermee = pygame.image.load('assets/images/dechet1.png').convert_alpha()
-    porte_ouverte_correcte = pygame.image.load('assets/images/dechet2.png').convert_alpha()
+    background_image = pygame.image.load('assets/images/sky.png').convert_alpha()
+    background_image = pygame.transform.scale(background_image, (screen.get_width(), screen.get_height()))
+
+    porte_fermee = pygame.image.load('assets/images/door.png').convert_alpha()
+    porte_ouverte_correcte = pygame.image.load('assets/images/open_door.png').convert_alpha()
     porte_ouverte_incorrecte = pygame.image.load('assets/images/dechet3.png').convert_alpha()
     door_width, door_height = porte_fermee.get_size()
     doors = [
@@ -200,7 +203,8 @@ def run_door_game(screen, font):
                             door_states[i] = 'incorrect'
                         running = False
                         
-        screen.fill((255, 255, 255))
+        screen.blit(background_image, (0, 0))
+
         
         for i, rect in enumerate(doors):
             if door_states[i] == 'closed':
