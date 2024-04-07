@@ -172,3 +172,46 @@ def run_cleaning_game(screen, font):
         pygame.time.Clock().tick(60)
     
     return not dechets
+
+def run_door_game(screen, font):
+    porte_fermee = pygame.image.load('assets/images/dechet1.png').convert_alpha()
+    porte_ouverte_correcte = pygame.image.load('assets/images/dechet2.png').convert_alpha()
+    porte_ouverte_incorrecte = pygame.image.load('assets/images/dechet3.png').convert_alpha()
+    door_width, door_height = porte_fermee.get_size()
+    doors = [
+        porte_fermee.get_rect(topleft=(100, screen.get_height() // 2 - door_height // 2)),
+        porte_fermee.get_rect(topleft=(650, screen.get_height() // 2 - door_height // 2)),
+        porte_fermee.get_rect(topleft=(1200, screen.get_height() // 2 - door_height // 2))
+    ]
+    correct_door = random.randint(0, 2)
+    door_states = ['closed', 'closed', 'closed']
+    
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                for i, rect in enumerate(doors):
+                    if rect.collidepoint(event.pos):
+                        if i == correct_door:
+                            door_states[i] = 'correct'
+                        else:
+                            door_states[i] = 'incorrect'
+                        running = False
+                        
+        screen.fill((255, 255, 255))
+        
+        for i, rect in enumerate(doors):
+            if door_states[i] == 'closed':
+                screen.blit(porte_fermee, rect)
+            elif door_states[i] == 'correct':
+                screen.blit(porte_ouverte_correcte, rect)
+            else:
+                screen.blit(porte_ouverte_incorrecte, rect)
+        
+        pygame.display.flip()
+    
+    if 'correct' in door_states:
+        return True
+    return False

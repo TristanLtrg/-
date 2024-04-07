@@ -1,6 +1,7 @@
 import pygame
 import sys
-from src.minigame import run_minigame, run_clicker_game, run_cleaning_game
+import random
+from src.minigame import run_minigame, run_clicker_game, run_cleaning_game, run_door_game
 
 pygame.init()
 WINDOW_WIDTH = 1920
@@ -188,6 +189,12 @@ def main():
         print("Félicitations ! Vous avez nettoyé tous les déchets.")
     else:
         print("Temps écoulé ! Essayez encore.")
+    game_won = run_door_game(screen, font)
+    
+    if game_won:
+        print("Félicitations ! Vous avez trouvé la bonne porte !")
+    else:
+        print("Dommage, ce n'était pas la bonne porte. Essayez encore !")
     pygame.quit()
     sys.exit()
     pygame.time.Clock().tick(60)
