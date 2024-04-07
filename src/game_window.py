@@ -1,5 +1,6 @@
 import pygame
 import sys
+import random
 from src.minigame import run_minigame 
 
 pygame.init()
@@ -158,6 +159,49 @@ def game_over_scene(screen, font):
         pygame.display.flip()
         pygame.time.Clock().tick(60)
 
+def run_clicker_game(screen, font):
+    click_goal = 30
+    time_limit = 10
+    clicks = 0
+    start_time = pygame.time.get_ticks()
+    
+    click_image = pygame.image.load('assets/images/grooppy.png').convert_alpha()
+    image_rect = click_image.get_rect(center=(screen.get_width() // 2, screen.get_height() // 2))
+    
+    def shake_image():
+        offset = random.randint(-20, 20), random.randint(-20, 20)
+        new_position = image_rect.move(offset)
+        screen.blit(click_image, new_position)
+        pygame.display.update()
+        pygame.time.delay(50)
+        screen.blit(click_image, image_rect)
+    
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN and image_rect.collidepoint(event.pos):
+                clicks += 1
+                shake_image()
+                
+        current_time = pygame.time.get_ticks()
+        time_elapsed = (current_time - start_time) / 1000
+        time_left = max(0, time_limit - time_elapsed)
+        
+        if time_left == 0 or clicks >= click_goal:
+            running = False
+        
+        screen.fill((0, 0, 0))
+        screen.blit(click_image, image_rect)
+        info_text = font.render(f"Clics restants: {click_goal - clicks} | Temps restant: {int(time_left)}s", True, (255, 255, 255))
+        screen.blit(info_text, (10, 10))
+        
+        pygame.display.flip()
+    
+    return clicks >= click_goal
 
 def main():
     pygame.init()
@@ -177,6 +221,13 @@ def main():
             elif action == 'quit':
                 break
             score = 0
+    clicker_success = run_clicker_game(screen, font)
+    if clicker_success:
+        print("Bravo")
+    else:
+        print("Dommage")
+
+    ##appelle d'un nouveau ici jeu ici
     pygame.quit()
     sys.exit()
     pygame.time.Clock().tick(60)
